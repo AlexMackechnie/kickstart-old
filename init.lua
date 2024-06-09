@@ -738,16 +738,16 @@ require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
       icons_enabled = true,
-      theme = 'auto',
+      -- theme = 'auto',
       sections = {
         lualine_a = {'mode'},
         lualine_b = {'branch', 'diff'},
-        lualine_c = {'filename'},
-
-      }
+        lualine_c = {
+          {'filename', path = 1},
+        }
+      },
       -- component_separators = '|',
       -- section_separators = '',
-      -- path = 3
     },
   },
 
@@ -812,6 +812,10 @@ require('lazy').setup({
         require("nvim-tree").setup({
             filters = {
                 dotfiles = true,
+            },
+            view = {
+              adaptive_size = true,
+              preserve_window_proportions = true
             },
         })
     end,
