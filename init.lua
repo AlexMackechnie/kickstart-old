@@ -399,7 +399,8 @@ require('lazy').setup({
           ensure_installed = {
             "pyright",
             "ruff",
-            "gopls"
+            "gopls",
+            "cfn-lint"
           }
         }
       }, -- NOTE: Must be loaded before dependants
@@ -828,6 +829,9 @@ require('lazy').setup({
               adaptive_size = true,
               preserve_window_proportions = true
             },
+            update_focused_file = {
+              enable = true
+            }
         })
     end,
     requires = {
@@ -842,19 +846,18 @@ require('lazy').setup({
     },
     config = true,
   },
-  -- {
-  --   "jose-elias-alvarez/null-ls.nvim",
-  --   ft = {"python"},
-  --   opts = function()
-  --     local null_ls = require("null-ls")
-  --     local opts = {
-  --       sources = {
-  --         require("null_ls.builtins.ruff"),
-  --       }
-  --     }
-  --     return opts
-  --   end
-  -- }
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    ft = {"yaml"},
+    config = function()
+      local null_ls = require("null-ls")
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.diagnostics.cfn_lint
+        }
+      })
+    end
+  }
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
