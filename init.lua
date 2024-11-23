@@ -362,7 +362,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      -- vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -400,7 +400,8 @@ require('lazy').setup({
             "pyright",
             "ruff",
             "gopls",
-            "cfn-lint"
+            "cfn-lint",
+            "jdtls"
           }
         }
       }, -- NOTE: Must be loaded before dependants
@@ -569,6 +570,11 @@ require('lazy').setup({
         -- tsserver = {},
         --
 
+        jdtls = {
+          -- Prevent automatic setup since we're handling it in java.lua
+          autostart = false,
+        },
+
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -613,7 +619,14 @@ require('lazy').setup({
           end,
         },
       }
+
+      require('custom.java').setup()
     end,
+  },
+
+  {
+    'mfussenegger/nvim-jdtls',
+    ft = 'java'
   },
 
   { -- Autocompletion
@@ -738,7 +751,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'retrobox'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -857,7 +870,40 @@ require('lazy').setup({
         }
       })
     end
-  }
+  },
+  {
+    "github/copilot.vim",
+    enabled=true,
+    -- config = function()
+    --   vim.g.copilot_enabled = false
+    --   vim.g.copilot_assumed_map = true
+    --   function ToggleCopilot()
+    --     if vim.g.copilot_enabled == nil then
+    --       vim.go.copilot_enabled = true
+    --     else
+    --       vim.g.copilot_enabled = not vim.g.copilot_enabled
+    --     end
+    --   end
+    -- end
+  },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+    },
+    build = "make tiktoken", -- Only on MacOS or Linux
+    opts = {
+      debug = true, -- Enable debugging
+      -- See Configuration section for rest
+    },
+    cmd={
+      "CopilotChat",
+      "CopilotChatToggle"
+    }
+    -- See Commands section for default commands if you want to lazy load on them
+  },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -906,6 +952,13 @@ vim.keymap.set("n", "<leader>8", function() require("harpoon.ui").nav_file(8) en
 
 vim.keymap.set('v', "<leader>y", "\"*y")
 
--- vim.opt.guicursor = ""
+vim.keymap.set('n', '<leader><leader>', '<cmd>CopilotChatToggle<cr>')
+
+vim.opt.tabstop = 4
+vim.opt.expandtab = true
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+
+vim.opt.conceallevel = 0
 
 -------------------------------------------------------------------------------------------
