@@ -49,7 +49,8 @@ function M.setup()
         '-data', workspace_dir,
       },
 
-      root_dir = require('jdtls.setup').find_root({'.git', 'gradlew', 'mvnw', 'build.gradle', 'pom.xml'}),
+      -- root_dir = require('jdtls.setup').find_root({'.git', 'gradlew', 'mvnw', 'build.gradle', 'pom.xml'}),
+      root_dir = require('jdtls.setup').find_root({'build.gradle'}),
 
       settings = {
         java = {
@@ -58,6 +59,11 @@ function M.setup()
           },
           maven = {
             downloadSources = true,
+          },
+          import = {
+            gradle = {
+              enabled = true,
+            },
           },
           implementationsCodeLens = {
             enabled = true,
