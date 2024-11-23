@@ -60,11 +60,6 @@ function M.setup()
           maven = {
             downloadSources = true,
           },
-          import = {
-            gradle = {
-              enabled = true,
-            },
-          },
           implementationsCodeLens = {
             enabled = true,
           },
